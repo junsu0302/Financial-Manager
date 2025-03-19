@@ -13,3 +13,4 @@ class Colors:
 def state_print(state: str, content: str):
   """컬러 출력 함수"""
   print(getattr(Colors, state.upper(), Colors.WHITE) + content + Colors.END)
+  
