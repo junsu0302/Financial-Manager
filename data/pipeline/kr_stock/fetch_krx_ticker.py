@@ -20,7 +20,7 @@ headers = {
   'User-Agent': os.getenv('USER_AGENT')
 }
 
-def krx_sector_loader(market_id:str) -> pd.DataFrame:
+def krx_ticker_loader(market_id:str) -> pd.DataFrame:
   """
   KRX에서 특정 시장(KOSPI/KOSDAQ)의 업종 데이터를 가져오는 함수
     
@@ -50,32 +50,32 @@ def krx_sector_loader(market_id:str) -> pd.DataFrame:
     
   return pd.read_csv(BytesIO(response.content), encoding='EUC-KR')
 
-def fetch_krx_sector():
+def fetch_krx_ticker():
   """KRX에서 가져온 KOSPI/KOSDAQ 데이터를 병합하여 반환하는 함수
 
   Returns:
-    pd.DataFrame: KOSPI/KOSDAQ을 합한 주식 KRX에서 제공하는 주식 섹터 데이터
+    pd.DataFrame: ['종목코드', '종목명', '시장구분', '업종명', '종가', '대비', '등락률', '시가총액', '기준일']
   """
   # KOSPI & KOSDAQ 업종 데이터 가져오기
   try:
-    sector_stk = krx_sector_loader('STK')
+    sector_stk = krx_ticker_loader('STK')
     state_print("WHITE", "- KOSPI 업종 데이터 다운로드 완료")
-    sector_ksq = krx_sector_loader('KSQ')
+    sector_ksq = krx_ticker_loader('KSQ')
     state_print("WHITE", "- KOSDAQ 업종 데이터 다운로드 완료")
   except Exception as e:
     state_print("RED", str(e))
     exit()
 
   # KOSPI & KOSDAQ 데이터 병합
-  krx_sector = pd.concat([sector_stk, sector_ksq]).reset_index(drop=True)
+  krx_ticker = pd.concat([sector_stk, sector_ksq]).reset_index(drop=True)
 
   # 데이터 클리닝
-  krx_sector['종목명'] = krx_sector['종목명'].str.strip()  # 종목명 공백 제거
-  krx_sector['기준일'] = biz_day  # 기준일 컬럼 추가
+  krx_ticker['종목명'] = krx_ticker['종목명'].str.strip()  # 종목명 공백 제거
+  krx_ticker['기준일'] = biz_day  # 기준일 컬럼 추가
 
   # '기준일' 컬럼을 날짜 형식(YYYY-MM-DD)으로 변환
-  krx_sector['기준일'] = pd.to_datetime(krx_sector['기준일'], format='%Y%m%d', errors='coerce')
+  krx_ticker['기준일'] = pd.to_datetime(krx_ticker['기준일'], format='%Y%m%d', errors='coerce')
 
   state_print("GREEN", "✅ KOSPI/KOSDAQ 업종 데이터 수집 완료")
 
-  return krx_sector
+  return krx_ticker
