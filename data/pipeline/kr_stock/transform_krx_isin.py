@@ -4,7 +4,7 @@ import psycopg2
 import pandas as pd
 from datetime import datetime
 
-from pipeline.kr_stock.fetch_isin import fetch_isin
+from pipeline.kr_stock.fetch_krx_isin import fetch_krx_isin
 
 def transform_krx_isin() -> pd.DataFrame:
   """KRX(한국 거래소)에서 수집한 INIS 데이터를 변환하는 함수. DB에 보유한 종목 데이터와 병합 수행
@@ -14,7 +14,7 @@ def transform_krx_isin() -> pd.DataFrame:
   """
 
   # KRX에서 ISIN 데이터 수집
-  isin_df = fetch_isin()
+  isin_df = fetch_krx_isin()
 
   # PostgreSQL 연결 정보
   DB_PARAMS = {
