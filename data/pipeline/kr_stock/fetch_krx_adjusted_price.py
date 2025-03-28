@@ -9,6 +9,7 @@ from utils import get_biz_day
 
 def fetch_krx_adjusted_price(cd_nm: str, isin: str, nm: str) -> pd.DataFrame:
   """KRX(한국 거래소)에서 특정 종목의 수정 주가 데이터를 반환하는 함수
+  수정주가 :  주식의 액면분할, 무상증자, 유상증자, 배당 등과 같은 기업의 자본 변동이나 시장 이벤트가 발생했을 때, 과거 주가를 해당 이벤트에 맞춰 보정한 가격
 
   Args:
     cd_nm (str): 검색 코드 (종목 코드 / 종목 명)
