@@ -23,17 +23,17 @@ def transform_krx_adjusted_price(cd: str, isin: str, nm: str) -> pd.DataFrame:
 
   # 컬럼명 변경 매핑 (한글 컬럼명 → 영문 컬럼명)
   column_mapping = {
-    '일자': 'trade_date',
-    '종가': 'close_price',
-    '대비': 'price_diff',
-    '등락률': 'fluctuation_rt',
-    '시가': 'open_price',
-    '고가': 'high_price',
-    '저가': 'low_price',
-    '거래량': 'trade_volume',
-    '거래대금': 'trade_value',
-    '시가총액': 'market_cap',
-    '상장주식수': 'listed_shares'
+    '일자': 'trd_dt',
+    '종가': 'cls_prc',
+    '대비': 'prc_chg',
+    '등락률': 'fluc_rt',
+    '시가': 'opn_prc',
+    '고가': 'high_prc',
+    '저가': 'low_prc',
+    '거래량': 'trd_vol',
+    '거래대금': 'trd_amt',
+    '시가총액': 'mkt_cap',
+    '상장주식수': 'list_shr'
   }
   adjusted_price_df = adjusted_price_df.rename(columns=column_mapping)
 
@@ -42,6 +42,6 @@ def transform_krx_adjusted_price(cd: str, isin: str, nm: str) -> pd.DataFrame:
   adjusted_price_df = adjusted_price_df[['cmp_cd'] + [col for col in adjusted_price_df.columns if col != "cmp_cd"]]
 
   # 최신 거래 데이터가 위에 오도록 trade date를 기준으로 정렬 
-  adjusted_price_df = adjusted_price_df.sort_values(by='trade_date', ascending=False)
+  adjusted_price_df = adjusted_price_df.sort_values(by='trd_dt', ascending=False)
 
   return adjusted_price_df

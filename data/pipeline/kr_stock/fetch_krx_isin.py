@@ -4,11 +4,11 @@ import requests as rq
 from dotenv import load_dotenv
 import pandas as pd
 
-def fetch_isin() -> pd.DataFrame:
+def fetch_krx_isin() -> pd.DataFrame:
   """KRX(한국 거래소)에서 한국 주식 종목별 표준코드(ISIN)를 반환하는 함수
 
   Returns:
-    pd.DataFrame: ['cmp_cd' (종목 코드), 'isin_cd' (표준코드)] (단축코드 = 종목 코드)
+    pd.DataFrame: [cmp_cd, isin_cd]
 
   Raises:
     Exception: KRX 서버에서 데이터 접근이 거부될 경우 예외 발생
@@ -43,4 +43,6 @@ def fetch_isin() -> pd.DataFrame:
   data =  pd.read_csv(BytesIO(response.content), encoding='EUC-KR')
   data = data.rename(columns={'단축코드': 'cmp_cd', '표준코드': 'isin_cd'})
 
-  return data.loc[:, ['cmp_cd', 'isin_cd']]
+  krx_isin = data[['cmp_cd', 'isin_cd']]
+
+  return krx_isin
